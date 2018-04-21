@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Tilemap test</title>
+    <script src="phaser/phaser.js"></script>
+</head>
+<body>
+    <script>
+    var config = {
+        backgroundColor: 0xffffff,
+        width: 800,
+        height: 640,
+        physics: {
+            default: 'arcade'
+        },
+        type: Phaser.AUTO,
+        scene: {
+            preload: preload,
+            create: create,
+            update: update
+        }
+    };
+
+    var startPos = 50;
+    var horizontalGap = 200;
+    var verticalGap = 200;
+
+    var nodeArray = [
+        [startPos, startPos],                                       //A0
+        [startPos + horizontalGap, startPos],                       //B1
+        [startPos + (horizontalGap*2), startPos + (verticalGap/2)], //C2
+        [startPos, startPos + verticalGap],                         //D3
+        [startPos + horizontalGap,startPos + verticalGap],          //E4
+        [startPos + (horizontalGap*2), startPos + verticalGap + (verticalGap/2)],  //F5
+        [startPos,startPos+(verticalGap*2)],                        //G6
+        [startPos + horizontalGap,startPos+(verticalGap*2)]         //H7
+    ];
+
+    var edgesArray = [
+        [0,1],  //1 
+        [0,3],  //2
+        [3,1],  //3
+        [1,4],  //4
+        [1,2],  //5
+        [4,2],  //6
+        [3,4],  //7
+        [3,6],  //8
+        [6,4],  //9
+        [4,7],  //10
+        [4,5],  //11
+        [2,5],  //12
+        [6,7],  //13
+        [7,5],  //14
+    ];
+
+    var game = new Phaser.Game(config);
+
+    function preload ()
+    {
+        this.load.image('cow', 'assets/cow.png');
+    }
+
+    function create ()
+    {
+        //TODO: make this more readable :/
+        //create edges between nodes (both directions)
+        var paths = [];
+        var path, edgeArray;
+        for(i=0; i<edgesArray.length; i++)
+        {
+            edgeArray = edgesArray[i];
+            path = new Phaser.Curves.Path(nodeArray[edgeArray[0]][0], nodeArray[edgeArray[0]][1]);
+            path.lineTo(nodeArray[edgeArray[1]][0], nodeArray[edgeArray[1]][1]);
+
+            paths.push(path);
+        }
+        
+        graphics = this.add.graphics();
+        graphics.lineStyle(1, 0x000000, 1);
+
+        for(i=0; i<paths.length; i++)
+        {
+            paths[i].draw(graphics);
+        }
+
+        // draw cow at each node
+        var i;
+        for (i=0; i<nodeArray.length; i++)
+        {
+            this.add.image(nodeArray[i][0], nodeArray[i][1], 'cow');
+        }
+
+        
+    }
+    
+    function update()
+    {
+        
+    }
+
+    </script>
+    
+</body>
+</html>
