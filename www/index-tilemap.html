@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Tilemap test</title>
+    <script src="phaser/phaser.js"></script>
+</head>
+<body>
+    <script>
+    var config = {
+        backgroundColor: 0xffffff,
+        width: 800,
+        height: 640,
+        physics: {
+            default: 'arcade'
+        },
+        type: Phaser.AUTO,
+        scene: {
+            preload: preload,
+            create: create,
+            update: update
+        }
+    };
+
+    var game = new Phaser.Game(config);
+    var map, cows, cowSprites, randomDirs, cursors;
+    var cowColor = 0xffffff;
+
+    function preload ()
+    {
+        this.load.image('tiles', 'assets/tilemaps/tiles/farm.png');
+        this.load.tilemapTiledJSON('map', 'assets/tilemaps/maps/farm.json');
+        this.load.image('cow', 'assets/cow.png');
+    }
+
+    function create ()
+    {
+        map = this.make.tilemap({ key: 'map' });
+        var tileset = map.addTilesetImage('farm','tiles');
+        var layer = map.createStaticLayer('background', tileset, 0, 0);
+        var fields = map.createDynamicLayer('fields', tileset, 0, 0);
+        fields.setTileIndexCallback(4, overlapCallback, this);
+        
+
+        var hedge = map.createDynamicLayer('hedge', tileset, 0,0);
+        hedge.setCollision(2);
+        hedge.setTileIndexCallback(2, colliderCallback, this);
+
+        var cowConfig = {
+                key: 'cow'
+        };
+        cowSprites = map.createFromObjects('cows', 'cowSpawn', cowConfig);
+        cows = this.physics.add.group();
+        for(var i=0; i<cowSprites.length; i++)
+        {
+            cows.add(this.physics.add.existing(cowSprites[i]));
+            cowSprites[i].setDataEnabled();
+            var direction = Phaser.Math.RandomXY(new Phaser.Math.Vector2(), 100)
+            cowSprites[i].data.set('infected', false);
+            cowSprites[i].body.setVelocity(direction.x, direction.y);
+        }
+        this.physics.add.overlap(cows, fields);
+        this.physics.add.collider(cows, hedge);
+        
+    }
+
+    function overlapCallback(sprite, tile)
+    {
+        sprite.setAlpha(0.2);
+        sprite.data.set('infected', true);
+    }
+
+    function colliderCallback(sprite, tile)
+    {
+        var direction = Phaser.Math.RandomXY(new Phaser.Math.Vector2(), 100)
+        sprite.body.setVelocity(direction.x, direction.y);
+        console.log(direction);
+    }
+
+    
+    function update()
+    {
+        
+    }
+
+    </script>
+    
+</body>
+</html>
