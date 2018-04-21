@@ -74,7 +74,10 @@
             edgeArray = edgesArray[i];
             path = new Phaser.Curves.Path(nodeArray[edgeArray[0]][0], nodeArray[edgeArray[0]][1]);
             path.lineTo(nodeArray[edgeArray[1]][0], nodeArray[edgeArray[1]][1]);
-
+            paths.push(path);
+            
+            path = new Phaser.Curves.Path(nodeArray[edgeArray[1]][0], nodeArray[edgeArray[1]][1]);
+            path.lineTo(nodeArray[edgeArray[0]][0], nodeArray[edgeArray[0]][1]);
             paths.push(path);
         }
         
