@@ -1,0 +1,29 @@
+{
+  "name": "virus-game",
+  "version": "1.0.0",
+  "description": "",
+  "private": true,
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DannyT/virus-game.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DannyT/virus-game/issues"
+  },
+  "homepage": "https://github.com/DannyT/virus-game#readme",
+  "devDependencies": {
+    "copy-webpack-plugin": "^4.5.1",
+    "raw-loader": "^0.5.1",
+    "webpack": "^4.6.0",
+    "webpack-cli": "^2.0.15"
+  },
+  "dependencies": {
+    "phaser": "^3.6.0"
+  }
+}
